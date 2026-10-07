@@ -1,0 +1,19 @@
+rules_version = '2';
+
+// MediQR - DEMO-LEVEL Firestore rules (college exhibition only).
+//
+// - Anyone can READ a single profile document if they know its ID (needed so the
+//   public emergency page works after scanning a QR code without logging in).
+// - Nobody can LIST / browse the whole users collection.
+// - Only the logged-in owner can create or update their own profile.
+// - Nobody can delete profiles from the app.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if false;
+    }
+  }
+}
