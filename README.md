@@ -1,10 +1,10 @@
-# MediQR - Your medical information. One scan away.
+# Swasth ID - Your medical information. One scan away.
 
 > **This project is intended only as a college demonstration. It is NOT a production-ready medical information system. Real medical information is highly sensitive and would require strong authentication, authorization, encryption, auditing, privacy controls, consent management, secure infrastructure, and compliance with applicable laws and regulations.**
 
 ## 1. Project overview
 
-MediQR is a simple emergency medical information system. Every registered person gets a unique QR code that can be kept in a wallet, phone case, ID card or keychain. If that person is in an accident, anyone can scan the QR code (no login needed) and instantly see a clear emergency page with blood group, allergies, medical conditions, medications, vaccinations and an emergency contact with a one-tap **CALL CONTACT** button.
+Swasth ID is a simple emergency medical information system. Every registered person gets a unique QR code that can be kept in a wallet, phone case, ID card or keychain. If that person is in an accident, anyone can scan the QR code (no login needed) and instantly see a clear emergency page with blood group, allergies, medical conditions, medications, vaccinations and an emergency contact with a one-tap **CALL CONTACT** button.
 
 The QR code contains only a link such as `https://your-site.com/emergency/USER_UID`. It does **not** contain medical data, so you can edit your profile at any time without printing a new QR.
 
@@ -34,25 +34,30 @@ npm install
 ## 5. Firebase setup (step by step)
 
 ### 5.1 Create a Firebase project
+
 1. Go to <https://console.firebase.google.com> and sign in with a Google account.
 2. Click **Create a project**, name it `mediqr`, and finish the wizard (Google Analytics can be turned off).
 
 ### 5.2 Enable Email/Password authentication
+
 1. In the left menu open **Build > Authentication** and click **Get started**.
 2. Open the **Sign-in method** tab, choose **Email/Password**, switch **Enable** on, and click **Save**.
 
 ### 5.3 Create the Firestore database
+
 1. Open **Build > Firestore Database** and click **Create database**.
 2. Choose a location near you (for India, `asia-south1` Mumbai is a good choice).
 3. Start in **production mode** (we add proper rules in step 5.6).
 
 ### 5.4 Create the Firebase Web App
+
 1. Click the **gear icon > Project settings**.
 2. Under **General > Your apps**, click the **web icon `</>`**.
 3. Give the app a nickname (e.g. `mediqr-web`). You can skip Firebase Hosting for now. Click **Register app**.
 4. Firebase shows a `firebaseConfig` object with `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId` and `appId`. Keep this page open.
 
 ### 5.5 Add the credentials to `.env`
+
 In the project root (same folder as `package.json`) copy the example file:
 
 ```bash
@@ -76,10 +81,12 @@ VITE_FIREBASE_APP_ID=1:1234567890:web:abcdef
 `.env` is already in `.gitignore`. After editing `.env` you must **stop and restart** `npm run dev`.
 
 ### 5.6 Add the Firestore security rules
+
 1. Open **Firestore Database > Rules**.
 2. Replace everything with the contents of `firestore.rules` from this project and click **Publish**.
 
 What the rules do:
+
 - Anyone can read **one** profile if they know its ID (needed for the public QR page).
 - Nobody can list or browse all profiles.
 - Only the logged-in owner can create or update their own profile.
@@ -112,6 +119,7 @@ npm run preview   # preview the production build locally
 ## 8. Deployment
 
 ### Option A: Vercel (easiest)
+
 1. Push the project to a GitHub repository (`.env` is ignored, which is correct).
 2. On <https://vercel.com> choose **Add New > Project** and import the repository. Vercel detects Vite automatically.
 3. Open **Settings > Environment Variables** and add the six `VITE_FIREBASE_*` values.
@@ -119,6 +127,7 @@ npm run preview   # preview the production build locally
 5. In Firebase Console go to **Authentication > Settings > Authorized domains** and add your Vercel domain (e.g. `mediqr.vercel.app`).
 
 ### Option B: Firebase Hosting
+
 ```bash
 npm install -g firebase-tools
 firebase login
@@ -126,6 +135,7 @@ firebase init hosting     # use existing project; public directory: dist; single
 npm run build
 firebase deploy --only hosting
 ```
+
 Your site will be at `https://YOUR-PROJECT.web.app` (already an authorized domain). `firebase.json` is included.
 
 After deploying, log in on the live site, open the dashboard and **download the QR again** so it points to the live address.
